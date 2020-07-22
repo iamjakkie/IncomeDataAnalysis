@@ -1,4 +1,7 @@
 library("tidyverse")
+library("skimr")
+library("viridis")
+library("scales")
 
 data <- read_csv('Data/adult.data.txt', col_names = c("Age", "Workclass",
                                                       "fnlwgt","education", 
@@ -65,6 +68,11 @@ ggplot(income_by_country, aes(x=native_country, fill=count)) +
 ggplot(data, aes(sex)) + geom_bar()
 gender_income <- data %>% group_by(sex) %>% count(income) 
 ggplot(gender_income, aes(sex,n)) + geom_boxplot()
+
+data %>%
+  mutate(native_country = fct_lump_min(native_country, 100)) %>%
+  group_by(native_country) %>%
+  summarise(n = sum(income==">50K")/n())
 
 # statistical
 # Age
